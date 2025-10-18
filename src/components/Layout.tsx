@@ -19,7 +19,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       <Link to="/add-expense">
         <Button
           size="icon"
-          className="fixed bottom-24 right-6 h-14 w-14 rounded-full shadow-lg glow-purple hover:scale-110 transition-transform"
+          className="fixed bottom-24 right-6 h-14 w-14 rounded-full shadow-lg gradient-premium glow-primary hover:scale-110 transition-transform border-0"
         >
           <Plus className="h-6 w-6" />
         </Button>

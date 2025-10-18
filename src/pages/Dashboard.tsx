@@ -34,7 +34,9 @@ const Dashboard = () => {
     <div className="min-h-screen p-6 max-w-lg mx-auto space-y-6 animate-fade-in">
       {/* Header */}
       <header className="space-y-2">
-        <h1 className="text-3xl font-bold">Hello, {userName} 👋</h1>
+        <h1 className="text-3xl font-bold bg-gradient-to-r from-primary via-accent to-primary-glow bg-clip-text text-transparent">
+          Hello, {userName} 👋
+        </h1>
         <p className="text-muted-foreground">Here's your spending overview</p>
       </header>
 
@@ -42,9 +44,12 @@ const Dashboard = () => {
       <BudgetCard spent={spent} budget={budget} month={currentMonth} />
 
       {/* Category Spending Chart */}
-      <Card className="p-6 rounded-2xl border border-border">
-        <h3 className="text-lg font-semibold mb-4">Spending by Category</h3>
-        <SpendingChart data={categoryData} />
+      <Card className="p-6 rounded-2xl border border-border relative overflow-hidden">
+        <div className="absolute inset-0 gradient-card opacity-50" />
+        <div className="relative z-10">
+          <h3 className="text-lg font-semibold mb-4">Spending by Category</h3>
+          <SpendingChart data={categoryData} />
+        </div>
       </Card>
 
       {/* Recent Transactions */}
@@ -59,10 +64,13 @@ const Dashboard = () => {
           </Link>
         </div>
 
-        <Card className="p-2 rounded-2xl border border-border space-y-1">
-          {recentTransactions.map((transaction, index) => (
-            <TransactionItem key={index} {...transaction} />
-          ))}
+        <Card className="p-2 rounded-2xl border border-border relative overflow-hidden">
+          <div className="absolute inset-0 gradient-card opacity-30" />
+          <div className="relative z-10 space-y-1">
+            {recentTransactions.map((transaction, index) => (
+              <TransactionItem key={index} {...transaction} />
+            ))}
+          </div>
         </Card>
       </div>
     </div>

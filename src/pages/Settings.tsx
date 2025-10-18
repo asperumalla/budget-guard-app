@@ -104,7 +104,7 @@ const Settings = () => {
               Connect your bank account to automatically track transactions
             </p>
           </div>
-          <Button onClick={handleConnectBank} className="w-full h-12 rounded-xl">
+          <Button onClick={handleConnectBank} className="w-full h-12 rounded-xl gradient-primary border-0">
             <Smartphone className="mr-2 h-5 w-5" />
             Connect Bank Account
           </Button>

@@ -115,7 +115,7 @@ const AddExpense = () => {
         {/* Add Button */}
         <Button
           onClick={handleAddExpense}
-          className="w-full h-12 rounded-xl text-base font-semibold"
+          className="w-full h-12 rounded-xl text-base font-semibold gradient-primary border-0 glow-primary"
         >
           Add Expense
         </Button>
