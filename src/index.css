@@ -8,79 +8,79 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 264 8% 8%;
-    --foreground: 240 10% 95%;
+    --background: 20 14% 8%;
+    --foreground: 30 10% 95%;
 
-    --card: 264 10% 12%;
-    --card-foreground: 240 10% 95%;
+    --card: 20 12% 12%;
+    --card-foreground: 30 10% 95%;
 
-    --popover: 264 10% 12%;
-    --popover-foreground: 240 10% 95%;
+    --popover: 20 12% 12%;
+    --popover-foreground: 30 10% 95%;
 
-    --primary: 262 67% 62%;
-    --primary-foreground: 240 10% 95%;
-    --primary-glow: 262 67% 72%;
+    --primary: 25 95% 53%;
+    --primary-foreground: 30 10% 95%;
+    --primary-glow: 25 95% 63%;
 
-    --secondary: 264 10% 16%;
-    --secondary-foreground: 240 10% 95%;
+    --secondary: 20 12% 16%;
+    --secondary-foreground: 30 10% 95%;
 
-    --muted: 264 10% 16%;
-    --muted-foreground: 240 5% 64%;
+    --muted: 20 12% 16%;
+    --muted-foreground: 30 5% 64%;
 
-    --accent: 262 67% 62%;
-    --accent-foreground: 240 10% 95%;
+    --accent: 15 86% 60%;
+    --accent-foreground: 30 10% 95%;
 
     --destructive: 0 84% 60%;
-    --destructive-foreground: 240 10% 95%;
+    --destructive-foreground: 30 10% 95%;
 
     --success: 142 76% 36%;
-    --success-foreground: 240 10% 95%;
+    --success-foreground: 30 10% 95%;
 
-    --border: 264 10% 20%;
-    --input: 264 10% 16%;
-    --ring: 262 67% 62%;
+    --border: 20 12% 20%;
+    --input: 20 12% 16%;
+    --ring: 25 95% 53%;
 
     --radius: 1rem;
 
-    --chart-1: 262 67% 62%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
+    --chart-1: 25 95% 53%;
+    --chart-2: 15 86% 60%;
+    --chart-3: 45 93% 47%;
+    --chart-4: 10 78% 54%;
+    --chart-5: 35 91% 55%;
   }
 
   .dark {
-    --background: 264 8% 8%;
-    --foreground: 240 10% 95%;
+    --background: 20 14% 8%;
+    --foreground: 30 10% 95%;
 
-    --card: 264 10% 12%;
-    --card-foreground: 240 10% 95%;
+    --card: 20 12% 12%;
+    --card-foreground: 30 10% 95%;
 
-    --popover: 264 10% 12%;
-    --popover-foreground: 240 10% 95%;
+    --popover: 20 12% 12%;
+    --popover-foreground: 30 10% 95%;
 
-    --primary: 262 67% 62%;
-    --primary-foreground: 240 10% 95%;
-    --primary-glow: 262 67% 72%;
+    --primary: 25 95% 53%;
+    --primary-foreground: 30 10% 95%;
+    --primary-glow: 25 95% 63%;
 
-    --secondary: 264 10% 16%;
-    --secondary-foreground: 240 10% 95%;
+    --secondary: 20 12% 16%;
+    --secondary-foreground: 30 10% 95%;
 
-    --muted: 264 10% 16%;
-    --muted-foreground: 240 5% 64%;
+    --muted: 20 12% 16%;
+    --muted-foreground: 30 5% 64%;
 
-    --accent: 262 67% 62%;
-    --accent-foreground: 240 10% 95%;
+    --accent: 15 86% 60%;
+    --accent-foreground: 30 10% 95%;
 
     --destructive: 0 84% 60%;
-    --destructive-foreground: 240 10% 95%;
+    --destructive-foreground: 30 10% 95%;
 
     --success: 142 76% 36%;
-    --success-foreground: 240 10% 95%;
+    --success-foreground: 30 10% 95%;
 
-    --border: 264 10% 20%;
-    --input: 264 10% 16%;
-    --ring: 262 67% 62%;
+    --border: 20 12% 20%;
+    --input: 20 12% 16%;
+    --ring: 25 95% 53%;
   }
 }
 
@@ -91,10 +91,6 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
-  }
-
-  .glass-card {
-    @apply bg-card/50 backdrop-blur-sm border border-border;
   }
 
   .glow-purple {
