@@ -77,7 +77,7 @@ const Transactions = () => {
       </div>
 
       {/* Total Summary */}
-      <Card className="p-4 rounded-2xl border border-border bg-secondary/50">
+      <Card className="p-4 rounded-2xl border border-border bg-gradient-to-br from-primary/5 to-accent/5 card-shadow">
         <div className="flex items-center justify-between">
           <p className="text-sm text-muted-foreground">Total Spent</p>
           <p className="text-2xl font-bold text-primary">-${totalSpent.toFixed(2)}</p>
@@ -85,7 +85,7 @@ const Transactions = () => {
       </Card>
 
       {/* Transactions List */}
-      <Card className="p-2 rounded-2xl border border-border space-y-1">
+      <Card className="p-2 rounded-2xl border border-border space-y-1 card-shadow bg-card">
         {filteredTransactions.length > 0 ? (
           filteredTransactions.map((transaction, index) => (
             <TransactionItem key={index} {...transaction} />

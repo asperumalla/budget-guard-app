@@ -45,7 +45,7 @@ const SetBudget = () => {
       </header>
 
       {/* Budget Form */}
-      <Card className="p-6 rounded-2xl border border-border space-y-6">
+      <Card className="p-6 rounded-2xl border border-border space-y-6 card-shadow bg-card">
         {/* Amount Input */}
         <div className="space-y-2">
           <Label htmlFor="budget" className="text-sm font-medium">
@@ -94,7 +94,7 @@ const SetBudget = () => {
       </Card>
 
       {/* Current Budget Summary */}
-      <Card className="p-6 rounded-2xl border border-border bg-secondary/50">
+      <Card className="p-6 rounded-2xl border border-border bg-gradient-to-br from-primary/5 to-accent/5 card-shadow">
         <h3 className="text-sm font-medium text-muted-foreground mb-4">Current Budget Progress</h3>
         <div className="grid grid-cols-3 gap-4 text-center">
           <div>

@@ -26,7 +26,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       </Link>
 
       {/* Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-card border-t border-border backdrop-blur-lg bg-card/80">
+      <nav className="fixed bottom-0 left-0 right-0 bg-card/95 border-t border-border backdrop-blur-xl card-shadow">
         <div className="flex justify-around items-center h-20 max-w-lg mx-auto px-4">
           {navItems.map((item) => {
             const Icon = item.icon;

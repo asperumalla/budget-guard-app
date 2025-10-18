@@ -15,17 +15,17 @@ const BudgetCard = ({ spent, budget, month }: BudgetCardProps) => {
 
   return (
     <Card
-      className={`p-6 rounded-2xl border-2 relative overflow-hidden ${
+      className={`p-6 rounded-2xl border-2 relative overflow-hidden card-shadow ${
         isOverBudget
-          ? "border-destructive/50"
-          : "border-success/50"
-      } animate-fade-in`}
+          ? "border-destructive/30"
+          : "border-success/30"
+      } animate-fade-in bg-card`}
     >
       {/* Gradient Background */}
-      <div className={`absolute inset-0 opacity-10 ${isOverBudget ? "gradient-danger" : "gradient-success"}`} />
+      <div className={`absolute inset-0 opacity-5 ${isOverBudget ? "gradient-danger" : "gradient-success"}`} />
       
       {/* Glow Effect */}
-      <div className={`absolute inset-0 ${isOverBudget ? "glow-danger" : "glow-success"}`} />
+      <div className={`absolute -inset-1 ${isOverBudget ? "glow-danger" : "glow-success"} opacity-50 blur-xl -z-10`} />
       
       <div className="space-y-4 relative z-10">
         <div className="flex items-center justify-between">

@@ -46,7 +46,7 @@ const AddExpense = () => {
       </header>
 
       {/* Expense Form */}
-      <Card className="p-6 rounded-2xl border border-border space-y-6">
+      <Card className="p-6 rounded-2xl border border-border space-y-6 card-shadow bg-card">
         {/* Amount Input */}
         <div className="space-y-2">
           <Label htmlFor="amount" className="text-sm font-medium">

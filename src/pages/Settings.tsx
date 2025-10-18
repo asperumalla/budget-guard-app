@@ -1,4 +1,4 @@
-import { Bell, Smartphone, Palette, CreditCard } from "lucide-react";
+import { Bell, Smartphone, CreditCard } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
@@ -26,7 +26,7 @@ const Settings = () => {
           <h3 className="text-lg font-semibold">Notifications</h3>
         </div>
 
-        <Card className="p-4 rounded-2xl border border-border space-y-4">
+        <Card className="p-4 rounded-2xl border border-border space-y-4 card-shadow bg-card">
           <div className="flex items-center justify-between">
             <div className="space-y-1">
               <Label htmlFor="daily-alerts" className="text-base font-medium">
@@ -69,28 +69,6 @@ const Settings = () => {
         </Card>
       </div>
 
-      {/* Appearance Section */}
-      <div className="space-y-4">
-        <div className="flex items-center gap-2">
-          <Palette className="h-5 w-5 text-primary" />
-          <h3 className="text-lg font-semibold">Appearance</h3>
-        </div>
-
-        <Card className="p-4 rounded-2xl border border-border">
-          <div className="flex items-center justify-between">
-            <div className="space-y-1">
-              <Label htmlFor="dark-mode" className="text-base font-medium">
-                Dark Mode
-              </Label>
-              <p className="text-sm text-muted-foreground">
-                Currently using dark theme
-              </p>
-            </div>
-            <Switch id="dark-mode" defaultChecked disabled />
-          </div>
-        </Card>
-      </div>
-
       {/* Bank Connection Section */}
       <div className="space-y-4">
         <div className="flex items-center gap-2">
@@ -98,7 +76,7 @@ const Settings = () => {
           <h3 className="text-lg font-semibold">Bank Account</h3>
         </div>
 
-        <Card className="p-6 rounded-2xl border border-border space-y-4">
+        <Card className="p-6 rounded-2xl border border-border space-y-4 card-shadow bg-card">
           <div className="space-y-2">
             <p className="text-sm text-muted-foreground">
               Connect your bank account to automatically track transactions
@@ -112,7 +90,7 @@ const Settings = () => {
       </div>
 
       {/* App Info */}
-      <Card className="p-4 rounded-2xl border border-border bg-secondary/50">
+      <Card className="p-4 rounded-2xl border border-border bg-gradient-to-br from-primary/5 to-accent/5 card-shadow">
         <div className="text-center space-y-1">
           <p className="text-sm font-medium">BudgetGuard</p>
           <p className="text-xs text-muted-foreground">Version 1.0.0</p>

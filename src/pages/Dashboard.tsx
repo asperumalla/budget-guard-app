@@ -44,8 +44,8 @@ const Dashboard = () => {
       <BudgetCard spent={spent} budget={budget} month={currentMonth} />
 
       {/* Category Spending Chart */}
-      <Card className="p-6 rounded-2xl border border-border relative overflow-hidden">
-        <div className="absolute inset-0 gradient-card opacity-50" />
+      <Card className="p-6 rounded-2xl border border-border relative overflow-hidden card-shadow bg-card">
+        <div className="absolute inset-0 gradient-card opacity-30" />
         <div className="relative z-10">
           <h3 className="text-lg font-semibold mb-4">Spending by Category</h3>
           <SpendingChart data={categoryData} />
@@ -64,8 +64,8 @@ const Dashboard = () => {
           </Link>
         </div>
 
-        <Card className="p-2 rounded-2xl border border-border relative overflow-hidden">
-          <div className="absolute inset-0 gradient-card opacity-30" />
+        <Card className="p-2 rounded-2xl border border-border relative overflow-hidden card-shadow bg-card">
+          <div className="absolute inset-0 gradient-card opacity-20" />
           <div className="relative z-10 space-y-1">
             {recentTransactions.map((transaction, index) => (
               <TransactionItem key={index} {...transaction} />
