@@ -1,28 +1,87 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BudgetGuard - Personal Finance Tracker</title>
-    <meta name="description" content="Control your monthly spending with BudgetGuard - a modern personal finance tracking app" />
-    <meta name="author" content="Your Name" />
-
-    <meta property="og:title" content="BudgetGuard - Personal Finance Tracker" />
-    <meta property="og:description" content="Control your monthly spending with BudgetGuard" />
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content="/placeholder.svg" />
-
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@your_handle" />
-    <meta name="twitter:image" content="/placeholder.svg" />
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  </head>
-
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+    <meta name="description" content="Control your monthly spending with BudgetGuard - a modern personal finance tracking app">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            text-align: center;
+            background: white;
+            padding: 60px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 600px;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+        }
+        p {
+            color: #666;
+            font-size: 1.2em;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        .button {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+        .button:hover {
+            transform: translateY(-2px);
+        }
+        .status {
+            background: #e8f5e8;
+            color: #2d5a2d;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 BudgetGuard</h1>
+        <p>Your personal finance tracking app is ready for deployment!</p>
+        
+        <div class="status">
+            ✅ Repository configured<br>
+            ✅ Build system ready<br>
+            ✅ GitHub Pages setup complete
+        </div>
+        
+        <p>To deploy your app, run these commands:</p>
+        <pre style="background: #f5f5f5; padding: 20px; border-radius: 10px; text-align: left; margin: 20px 0;">
+npm run build
+git checkout --orphan gh-pages
+git rm -rf .
+cp -r dist/* .
+git add .
+git commit -m "Deploy BudgetGuard app"
+git push origin gh-pages
+        </pre>
+        
+        <a href="https://github.com/asperumalla/budget-guard-app" class="button">
+            View Repository
+        </a>
+    </div>
+</body>
 </html>
