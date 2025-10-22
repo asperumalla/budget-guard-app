@@ -8,6 +8,8 @@ interface TransactionItemProps {
   amount: number;
   date: string;
   category: TransactionCategory;
+  source?: 'static' | 'plaid';
+  transaction_id?: string;
 }
 
 const categoryConfig: Record<TransactionCategory, { icon: any; color: string }> = {
@@ -19,7 +21,7 @@ const categoryConfig: Record<TransactionCategory, { icon: any; color: string }> 
   Other: { icon: MoreHorizontal, color: "bg-muted text-muted-foreground border-border" },
 };
 
-const TransactionItem = ({ merchant, amount, date, category }: TransactionItemProps) => {
+const TransactionItem = ({ merchant, amount, date, category, source, transaction_id }: TransactionItemProps) => {
   const config = categoryConfig[category];
   const Icon = config.icon;
 
@@ -36,6 +38,16 @@ const TransactionItem = ({ merchant, amount, date, category }: TransactionItemPr
             <Badge variant="outline" className={`${config.color} text-xs`}>
               {category}
             </Badge>
+            {source === 'plaid' && (
+              <Badge variant="secondary" className="text-xs bg-blue-100 text-blue-700 border-blue-200">
+                Bank
+              </Badge>
+            )}
+            {source === 'static' && (
+              <Badge variant="secondary" className="text-xs bg-gray-100 text-gray-600 border-gray-200">
+                Demo
+              </Badge>
+            )}
           </div>
         </div>
       </div>
