@@ -1,5 +1,6 @@
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 import BudgetCard from "@/components/BudgetCard";
 import TransactionItem, { type TransactionCategory } from "@/components/TransactionItem";
 import SpendingChart from "@/components/SpendingChart";
@@ -7,7 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
 const Dashboard = () => {
-  const userName = "Alex";
+  const { user } = useAuth();
+  const userName = user?.name || "User";
   const currentMonth = new Date().toLocaleString("default", { month: "long" });
 
   // Mock data
