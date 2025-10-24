@@ -21,7 +21,7 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
+      <BrowserRouter basename="/budget-guard-app">
         <AuthProvider>
           <Routes>
             {/* Public Routes */}
