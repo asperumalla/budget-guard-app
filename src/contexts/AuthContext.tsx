@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { useAuth0, User as Auth0User } from "@auth0/auth0-react";
 
 interface User {
   id: string;
@@ -13,10 +14,9 @@ interface AuthContextType {
   isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
-  // Auth0 integration methods (for future use)
+  // Auth0 integration methods
   loginWithAuth0: () => Promise<void>;
-  loginWithGoogle: () => Promise<void>;
-  loginWithGitHub: () => Promise<void>;
+  signUpWithAuth0: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -34,35 +34,42 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [demoUser, setDemoUser] = useState<User | null>(null);
+  const [isDemoLoading, setIsDemoLoading] = useState(false);
 
-  // Check for existing session on mount
+  const {
+    user: auth0User,
+    isAuthenticated: auth0IsAuthenticated,
+    isLoading: auth0IsLoading,
+    loginWithRedirect,
+    logout: auth0Logout,
+  } = useAuth0();
+
+  // Check for existing demo session on mount
   useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        // Check localStorage for existing session
-        const savedUser = localStorage.getItem("budgetguard_user");
-        if (savedUser) {
-          setUser(JSON.parse(savedUser));
-        }
-      } catch (error) {
-        console.error("Auth check failed:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    checkAuth();
+    const savedUser = localStorage.getItem("budgetguard_demo_user");
+    if (savedUser) {
+      setDemoUser(JSON.parse(savedUser));
+    }
   }, []);
 
+  // Use Auth0 user if available, otherwise use demo user
+  const user = auth0User ? {
+    id: auth0User.sub || "auth0-user",
+    email: auth0User.email || "",
+    name: auth0User.name || auth0User.email?.split("@")[0] || "User",
+    avatar: auth0User.picture
+  } : demoUser;
+
+  const isAuthenticated = auth0IsAuthenticated || !!demoUser;
+  const isLoading = auth0IsLoading || isDemoLoading;
+
   const login = async (email: string, password: string) => {
-    setIsLoading(true);
+    // For demo purposes, accept any email/password
+    setIsDemoLoading(true);
     try {
-      // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // For demo purposes, accept any email/password
       const demoUser: User = {
         id: "demo-user-123",
         email: email,
@@ -70,38 +77,46 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         avatar: `https://ui-avatars.com/api/?name=${email.split("@")[0]}&background=667eea&color=fff`
       };
       
-      setUser(demoUser);
-      localStorage.setItem("budgetguard_user", JSON.stringify(demoUser));
+      setDemoUser(demoUser);
+      localStorage.setItem("budgetguard_demo_user", JSON.stringify(demoUser));
     } catch (error) {
       throw new Error("Login failed");
     } finally {
-      setIsLoading(false);
+      setIsDemoLoading(false);
     }
   };
 
   const logout = () => {
-    setUser(null);
-    localStorage.removeItem("budgetguard_user");
+    if (auth0IsAuthenticated) {
+      auth0Logout({
+        logoutParams: {
+          returnTo: window.location.origin + "/budget-guard-app/budget/login",
+        },
+      });
+    } else {
+      setDemoUser(null);
+      localStorage.removeItem("budgetguard_demo_user");
+    }
   };
 
-  // Auth0 integration methods (placeholder for future implementation)
+  // Auth0 integration methods
   const loginWithAuth0 = async () => {
-    // TODO: Implement Auth0 login
-    console.log("Auth0 login - to be implemented");
-    throw new Error("Auth0 integration not yet implemented");
+    await loginWithRedirect({
+      authorizationParams: {
+        connection: "Username-Password-Authentication",
+      },
+    });
   };
 
-  const loginWithGoogle = async () => {
-    // TODO: Implement Google OAuth
-    console.log("Google login - to be implemented");
-    throw new Error("Google OAuth not yet implemented");
+  const signUpWithAuth0 = async () => {
+    await loginWithRedirect({
+      authorizationParams: {
+        connection: "Username-Password-Authentication",
+        screen_hint: "signup",
+      },
+    });
   };
 
-  const loginWithGitHub = async () => {
-    // TODO: Implement GitHub OAuth
-    console.log("GitHub login - to be implemented");
-    throw new Error("GitHub OAuth not yet implemented");
-  };
 
   const value: AuthContextType = {
     user,
@@ -110,8 +125,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     login,
     logout,
     loginWithAuth0,
-    loginWithGoogle,
-    loginWithGitHub,
+    signUpWithAuth0,
   };
 
   return (
