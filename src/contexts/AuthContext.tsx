@@ -90,7 +90,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     if (auth0IsAuthenticated) {
       auth0Logout({
         logoutParams: {
-          returnTo: window.location.origin + "/budget-guard-app/budget/login",
+          returnTo: window.location.origin + "/app/login",
         },
       });
     } else {
