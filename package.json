@@ -1,15 +1,15 @@
 {
-  "name": "budget-guard-app",
+  "name": "app",
   "private": true,
   "version": "1.0.0",
   "description": "Personal finance tracking application",
-  "homepage": "https://asperumalla.github.io/budget-guard-app",
+  "homepage": "https://asperumalla.github.io/app",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "build:dev": "vite build --mode development",
-    "build:prod": "VITE_AUTH0_REDIRECT_URI=https://asperumalla.github.io/budget-guard-app/budget vite build",
+    "build:prod": "VITE_AUTH0_REDIRECT_URI=https://asperumalla.github.io/app/budget vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
