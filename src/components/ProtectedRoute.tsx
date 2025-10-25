@@ -26,7 +26,7 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   }
 
   if (!isAuthenticated) {
-    return <Navigate to="/budget/login" replace />;
+    return <Navigate to="/login" replace />;
   }
 
   return <>{children}</>;

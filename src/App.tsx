@@ -30,11 +30,11 @@ const App = () => (
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter basename="/budget-guard-app">
+        <BrowserRouter basename="/app">
           <AuthProvider>
           <Routes>
             {/* Public Routes */}
-            <Route path="/budget/login" element={<Login />} />
+            <Route path="/login" element={<Login />} />
             
             {/* Protected Routes - All under /budget context */}
             <Route path="/budget" element={
