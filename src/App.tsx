@@ -37,7 +37,7 @@ const App = () => (
             <Route path="/login" element={<Login />} />
             
             {/* Protected Routes - All under /budget context */}
-            <Route path="/budget" element={
+            <Route path="/budget/dashboard" element={
               <ProtectedRoute>
                 <Layout>
                   <Dashboard />
@@ -73,8 +73,8 @@ const App = () => (
               </ProtectedRoute>
             } />
             
-            {/* Redirect root to /budget */}
-            <Route path="/" element={<Navigate to="/budget" replace />} />
+            {/* Redirect root to /budget/dashboard */}
+            <Route path="/" element={<Navigate to="/budget/dashboard" replace />} />
             
             {/* Catch-all route */}
             <Route path="*" element={<NotFound />} />

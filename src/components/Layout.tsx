@@ -15,7 +15,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   const { user, logout } = useAuth();
 
   const navItems = [
-    { icon: Home, label: "Home", path: "/budget" },
+    { icon: Home, label: "Home", path: "/budget/dashboard" },
     { icon: List, label: "Transactions", path: "/budget/transactions" },
     { icon: Settings, label: "Settings", path: "/budget/settings" },
   ];

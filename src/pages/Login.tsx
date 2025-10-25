@@ -24,7 +24,7 @@ const Login = () => {
       // Use Auth0 database login with the form credentials
       await loginWithAuth0();
       toast.success("Login successful! Welcome to BudgetGuard");
-      navigate("/budget");
+      navigate("/budget/dashboard");
     } catch (error) {
       toast.error("Login failed. Please try again.");
     } finally {
