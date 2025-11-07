@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Auth0Provider } from "@auth0/auth0-react";
 import { AuthProvider } from "./contexts/AuthContext";
 import { ConfigProvider, useConfig } from "./config/ConfigContext";
+import ErrorBoundary from "./components/ErrorBoundary";
 import Layout from "./components/Layout";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Login from "./pages/Login";
@@ -119,12 +120,14 @@ const AppContent = () => {
   );
 };
 
-// Main App component with ConfigProvider
+// Main App component with ConfigProvider and ErrorBoundary
 const App = () => {
   return (
-    <ConfigProvider>
-      <AppContent />
-    </ConfigProvider>
+    <ErrorBoundary>
+      <ConfigProvider>
+        <AppContent />
+      </ConfigProvider>
+    </ErrorBoundary>
   );
 };
 

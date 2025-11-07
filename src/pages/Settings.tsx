@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { usePlaidLink } from "react-plaid-link";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useConfig } from "@/config/ConfigContext";
+import { logger } from "@/lib/logger";
 
 interface ConnectedAccount {
   account_id: string;
@@ -63,19 +64,19 @@ const Settings = () => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log('Accounts response data:', data);
+        logger.log('Accounts response data:', data);
         const accounts = data.accounts || [];
-        console.log('Parsed accounts:', accounts);
+        logger.log('Parsed accounts:', accounts);
         // Log each account's icon URL for debugging
         accounts.forEach((account: ConnectedAccount, index: number) => {
-          console.log(`Account ${index} (${account.name}): institution_icon_url =`, account.institution_icon_url);
+          logger.log(`Account ${index} (${account.name}): institution_icon_url =`, account.institution_icon_url);
         });
         setConnectedAccounts(accounts);
       } else {
         throw new Error('Failed to fetch accounts');
       }
     } catch (error) {
-      console.error('Error fetching accounts:', error);
+      logger.error('Error fetching accounts:', error);
       setConnectedAccounts([]);
     } finally {
       setIsLoadingAccounts(false);
@@ -93,7 +94,7 @@ const Settings = () => {
   const plaidConfig = {
     token: linkToken,
     onSuccess: async (publicToken: string, metadata: { institution?: { name: string }; accounts?: Array<{ id: string; name: string }> }) => {
-      console.log('Plaid Link Success:', { publicToken, metadata });
+      logger.log('Plaid Link Success:', { publicToken, metadata });
       toast.success("Bank account connected successfully!");
       
       // Exchange public token for access token on your backend with Auth0 token
@@ -117,7 +118,7 @@ const Settings = () => {
 
         if (response.ok) {
           const data = await response.json();
-          console.log('Access token exchange successful:', data);
+          logger.log('Access token exchange successful:', data);
           toast.success("Bank account linked and ready!");
           // Refresh accounts list
           await fetchConnectedAccounts();
@@ -126,7 +127,7 @@ const Settings = () => {
           throw new Error(errorData.message || 'Failed to exchange public token');
         }
       } catch (error) {
-        console.error('Token exchange error:', error);
+        logger.error('Token exchange error:', error);
         toast.error(`Failed to complete bank connection: ${error instanceof Error ? error.message : 'Unknown error'}`);
       }
       
@@ -134,7 +135,7 @@ const Settings = () => {
       setLinkToken(null);
     },
     onExit: (err: Error | null, metadata: { institution?: { name: string }; status?: string }) => {
-      console.log('Plaid Link Exit:', { err, metadata });
+      logger.log('Plaid Link Exit:', { err, metadata });
       if (err) {
         toast.error("Bank connection was cancelled or failed.");
       }
@@ -147,7 +148,7 @@ const Settings = () => {
 
   // Debug Plaid Link state
   useEffect(() => {
-    console.log('Plaid Link state:', { ready, plaidError, linkToken });
+    logger.log('Plaid Link state:', { ready, plaidError, linkToken });
   }, [ready, plaidError, linkToken]);
 
   // Auto-open Plaid Link when token is set
@@ -158,13 +159,13 @@ const Settings = () => {
   }, [linkToken, ready, open]);
 
   const handleConnectBank = async () => {
-    console.log('Button clicked!', { isConnecting, ready, linkToken });
+    logger.log('Button clicked!', { isConnecting, ready, linkToken });
     
     // Simple test - just show a toast first
     toast.info("Button clicked! Starting bank connection...");
     
     if (isConnecting) {
-      console.log('Already connecting, returning early');
+      logger.log('Already connecting, returning early');
       return;
     }
     
@@ -175,23 +176,23 @@ const Settings = () => {
     const plaidEndpoint = `${apiBase}/api/plaid/link-token/create`;
 
     try {
-      console.log('Requesting link token from:', plaidEndpoint);
+      logger.log('Requesting link token from:', plaidEndpoint);
       const plaidResponse = await fetch(plaidEndpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({}),
       });
 
-      console.log('Response status:', plaidResponse.status);
+      logger.log('Response status:', plaidResponse.status);
       
       if (!plaidResponse.ok) {
         const errorText = await plaidResponse.text();
-        console.error('Error response:', errorText);
+        logger.error('Error response:', errorText);
         throw new Error(`Plaid link token request failed (${plaidResponse.status}): ${errorText}`);
       }
 
       const plaidData = await plaidResponse.json();
-      console.log('Plaid response data:', plaidData);
+      logger.log('Plaid response data:', plaidData);
       
       const plaidLinkToken = plaidData.link_token;
 
@@ -205,7 +206,7 @@ const Settings = () => {
       
       // The usePlaidLink hook will automatically open when linkToken is set
     } catch (error) {
-      console.error('Plaid Link Token Error:', error);
+      logger.error('Plaid Link Token Error:', error);
       toast.error(`Unable to create bank connection: ${error instanceof Error ? error.message : 'Unknown error'}`);
       setIsConnecting(false);
     }
@@ -316,11 +317,11 @@ const Settings = () => {
                               alt={account.institution_id || "Bank"}
                               className="w-10 h-10 rounded-lg object-contain bg-white p-1"
                               onError={() => {
-                                console.warn('Failed to load institution icon:', iconUrl);
+                                logger.warn('Failed to load institution icon:', iconUrl);
                                 setFailedIcons(prev => new Set(prev).add(iconUrl));
                               }}
                               onLoad={() => {
-                                console.log('Successfully loaded institution icon:', iconUrl);
+                                logger.log('Successfully loaded institution icon:', iconUrl);
                               }}
                             />
                           ) : null}

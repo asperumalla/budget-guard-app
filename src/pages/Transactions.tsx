@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
 import type { PlaidTransaction } from "@/services/api";
+import { logger } from "@/lib/logger";
 
 interface TransactionData {
   merchant: string;
@@ -70,7 +71,7 @@ const Transactions = () => {
         toast.info("No transactions found. If you haven't connected your bank, please do so in Settings.");
       }
     } catch (error) {
-      console.error('Error refreshing transactions:', error);
+      logger.error('Error refreshing transactions:', error);
       toast.error(`Failed to refresh transactions: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   };

@@ -2,6 +2,7 @@ import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
 import { initializeConfig } from "./config/config";
+import { logger } from "./lib/logger";
 
 // Initialize configuration before rendering app
 const initApp = async () => {
@@ -9,7 +10,7 @@ const initApp = async () => {
   
   if (!backendUrl) {
     const errorMessage = "VITE_API_BASE_URL environment variable is required";
-    console.error(errorMessage);
+    logger.error(errorMessage);
     const root = document.getElementById("root");
     if (root) {
       root.innerHTML = `
@@ -27,12 +28,12 @@ const initApp = async () => {
   
   try {
     await initializeConfig(backendUrl);
-    console.log("Configuration initialized successfully");
+    logger.log("Configuration initialized successfully");
     
     // Render app after config is loaded
     createRoot(document.getElementById("root")!).render(<App />);
   } catch (error) {
-    console.error("Failed to initialize configuration:", error);
+    logger.error("Failed to initialize configuration:", error);
     const root = document.getElementById("root");
     if (root) {
       root.innerHTML = `

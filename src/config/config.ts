@@ -4,6 +4,7 @@
  */
 
 import { AppConfig } from './types';
+import { logger } from '../lib/logger';
 
 let config: AppConfig | null = null;
 let configPromise: Promise<AppConfig> | null = null;
@@ -22,7 +23,7 @@ export const fetchConfig = async (backendUrl: string): Promise<AppConfig> => {
   const configEndpoint = `${backendUrl.replace(/\/$/, '')}/api/config`;
 
   try {
-    console.log('Fetching configuration from:', configEndpoint);
+    logger.log('Fetching configuration from:', configEndpoint);
     const response = await fetch(configEndpoint, {
       method: 'GET',
       headers: {
@@ -35,10 +36,10 @@ export const fetchConfig = async (backendUrl: string): Promise<AppConfig> => {
     }
 
     const data = await response.json();
-    console.log('Configuration loaded successfully:', data);
+    logger.log('Configuration loaded successfully:', data);
     return data as AppConfig;
   } catch (error) {
-    console.error('Failed to fetch configuration from backend:', error);
+    logger.error('Failed to fetch configuration from backend:', error);
     throw new Error(`Configuration fetch failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
 };

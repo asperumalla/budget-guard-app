@@ -4,6 +4,7 @@
  */
 
 import { getConfig } from "../config/config";
+import { logger } from "../lib/logger";
 
 // Get API base URL from config
 const getApiBaseUrl = (): string => {
@@ -68,7 +69,7 @@ export const fetchUserTransactions = async (
     requestBody.endDate = endDate;
   }
 
-  console.log('Fetching user transactions from:', endpoint);
+  logger.log('Fetching user transactions from:', endpoint);
 
   const response = await fetch(endpoint, {
     method: "POST",
@@ -85,7 +86,7 @@ export const fetchUserTransactions = async (
   }
 
   const data = await response.json();
-  console.log('User transactions response:', data);
+  logger.log('User transactions response:', data);
   return data;
 };
 
@@ -110,7 +111,7 @@ export const fetchUserTransactionsByHeader = async (
   
   const url = params.toString() ? `${endpoint}?${params.toString()}` : endpoint;
 
-  console.log('Fetching user transactions from:', url);
+  logger.log('Fetching user transactions from:', url);
 
   const response = await fetch(url, {
     method: "GET",
@@ -126,7 +127,7 @@ export const fetchUserTransactionsByHeader = async (
   }
 
   const data = await response.json();
-  console.log('User transactions response:', data);
+  logger.log('User transactions response:', data);
   return data;
 };
 

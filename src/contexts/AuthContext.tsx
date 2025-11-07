@@ -2,6 +2,7 @@ import { createContext, useContext, useState, useEffect, useCallback, ReactNode 
 import { useAuth0, User as Auth0User } from "@auth0/auth0-react";
 import { fetchUserTransactions, type PlaidTransaction } from "@/services/api";
 import { useConfig } from "@/config/ConfigContext";
+import { logger } from "@/lib/logger";
 
 interface User {
   id: string;
@@ -67,7 +68,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const refreshTransactions = useCallback(async () => {
     // Only fetch for Auth0 authenticated users
     if (!auth0IsAuthenticated || !auth0User) {
-      console.log("Skipping transaction fetch - user not authenticated with Auth0");
+      logger.log("Skipping transaction fetch - user not authenticated with Auth0");
       return;
     }
 
@@ -80,7 +81,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         throw new Error("Failed to get Auth0 access token");
       }
 
-      console.log("Fetching transactions with Auth0 token...");
+      logger.log("Fetching transactions with Auth0 token...");
       
       // Calculate date range (last 30 days by default)
       const endDate = new Date();
@@ -96,13 +97,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
       if (response.transactions) {
         setTransactions(response.transactions);
-        console.log(`Successfully loaded ${response.transactions.length} transactions`);
+        logger.log(`Successfully loaded ${response.transactions.length} transactions`);
       } else {
         setTransactions([]);
-        console.log("No transactions found in response");
+        logger.log("No transactions found in response");
       }
     } catch (error) {
-      console.error("Error fetching transactions:", error);
+      logger.error("Error fetching transactions:", error);
       setTransactions([]);
       // Don't show error toast here - let the Transactions page handle it
     } finally {
@@ -114,7 +115,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   useEffect(() => {
     if (auth0IsAuthenticated && auth0User && !auth0IsLoading) {
       refreshTransactions().catch((error) => {
-        console.error("Failed to fetch transactions on login:", error);
+        logger.error("Failed to fetch transactions on login:", error);
       });
     } else if (!auth0IsAuthenticated) {
       // Clear transactions when logged out
@@ -177,14 +178,14 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         throw new Error("Auth0 loginWithRedirect is not available. Please check Auth0 configuration.");
       }
       
-      console.log("Attempting Auth0 login redirect...");
+      logger.log("Attempting Auth0 login redirect...");
       await loginWithRedirect({
         authorizationParams: {
           connection: "Username-Password-Authentication",
         },
       });
     } catch (error) {
-      console.error("Auth0 loginWithRedirect error:", error);
+      logger.error("Auth0 loginWithRedirect error:", error);
       const errorMessage = error instanceof Error ? error.message : "Failed to redirect to Auth0 login";
       throw new Error(errorMessage);
     }
@@ -203,7 +204,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         },
       });
     } catch (error) {
-      console.error("Auth0 signUpWithAuth0 error:", error);
+      logger.error("Auth0 signUpWithAuth0 error:", error);
       const errorMessage = error instanceof Error ? error.message : "Failed to redirect to Auth0 signup";
       throw new Error(errorMessage);
     }

@@ -8,6 +8,7 @@ import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
 import { useConfig } from "@/config/ConfigContext";
+import { logger } from "@/lib/logger";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -30,7 +31,7 @@ const Login = () => {
       // After Auth0 login, user will be redirected back to /app/budget/dashboard
     } catch (error) {
       setIsLoading(false);
-      console.error("Login error:", error);
+      logger.error("Login error:", error);
       const errorMessage = error instanceof Error ? error.message : "Login failed. Please try again.";
       toast.error(errorMessage);
     }
