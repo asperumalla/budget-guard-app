@@ -1,5 +1,7 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from "react";
 import { useAuth0, User as Auth0User } from "@auth0/auth0-react";
+import { fetchUserTransactions, type PlaidTransaction } from "@/services/api";
+import { useConfig } from "@/config/ConfigContext";
 
 interface User {
   id: string;
@@ -12,11 +14,15 @@ interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
+  transactions: PlaidTransaction[];
+  isLoadingTransactions: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
   // Auth0 integration methods
   loginWithAuth0: () => Promise<void>;
   signUpWithAuth0: () => Promise<void>;
+  // Transaction methods
+  refreshTransactions: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -34,8 +40,11 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
+  const config = useConfig();
   const [demoUser, setDemoUser] = useState<User | null>(null);
   const [isDemoLoading, setIsDemoLoading] = useState(false);
+  const [transactions, setTransactions] = useState<PlaidTransaction[]>([]);
+  const [isLoadingTransactions, setIsLoadingTransactions] = useState(false);
 
   const {
     user: auth0User,
@@ -43,6 +52,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     isLoading: auth0IsLoading,
     loginWithRedirect,
     logout: auth0Logout,
+    getAccessTokenSilently,
   } = useAuth0();
 
   // Check for existing demo session on mount
@@ -52,6 +62,65 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       setDemoUser(JSON.parse(savedUser));
     }
   }, []);
+
+  // Fetch transactions from backend using Auth0 token
+  const refreshTransactions = useCallback(async () => {
+    // Only fetch for Auth0 authenticated users
+    if (!auth0IsAuthenticated || !auth0User) {
+      console.log("Skipping transaction fetch - user not authenticated with Auth0");
+      return;
+    }
+
+    setIsLoadingTransactions(true);
+    try {
+      // Get Auth0 access token
+      const accessToken = await getAccessTokenSilently();
+      
+      if (!accessToken) {
+        throw new Error("Failed to get Auth0 access token");
+      }
+
+      console.log("Fetching transactions with Auth0 token...");
+      
+      // Calculate date range (last 30 days by default)
+      const endDate = new Date();
+      const startDate = new Date();
+      startDate.setDate(startDate.getDate() - 30);
+
+      // Fetch transactions from backend
+      const response = await fetchUserTransactions(
+        accessToken,
+        startDate.toISOString().split('T')[0], // Format: yyyy-MM-dd
+        endDate.toISOString().split('T')[0]
+      );
+
+      if (response.transactions) {
+        setTransactions(response.transactions);
+        console.log(`Successfully loaded ${response.transactions.length} transactions`);
+      } else {
+        setTransactions([]);
+        console.log("No transactions found in response");
+      }
+    } catch (error) {
+      console.error("Error fetching transactions:", error);
+      setTransactions([]);
+      // Don't show error toast here - let the Transactions page handle it
+    } finally {
+      setIsLoadingTransactions(false);
+    }
+  }, [auth0IsAuthenticated, auth0User, getAccessTokenSilently]);
+
+  // Fetch transactions when Auth0 user is authenticated
+  useEffect(() => {
+    if (auth0IsAuthenticated && auth0User && !auth0IsLoading) {
+      refreshTransactions().catch((error) => {
+        console.error("Failed to fetch transactions on login:", error);
+      });
+    } else if (!auth0IsAuthenticated) {
+      // Clear transactions when logged out
+      setTransactions([]);
+    }
+  }, [auth0IsAuthenticated, auth0User, auth0IsLoading, refreshTransactions]);
 
   // Use Auth0 user if available, otherwise use demo user
   const user = auth0User ? {
@@ -70,11 +139,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     try {
       await new Promise(resolve => setTimeout(resolve, 1000));
       
+      // Get primary color from config (remove # if present)
+      const primaryColor = config.ui.theme.primaryColor.replace('#', '');
       const demoUser: User = {
         id: "demo-user-123",
         email: email,
         name: email.split("@")[0],
-        avatar: `https://ui-avatars.com/api/?name=${email.split("@")[0]}&background=667eea&color=fff`
+        avatar: `https://ui-avatars.com/api/?name=${email.split("@")[0]}&background=${primaryColor}&color=fff`
       };
       
       setDemoUser(demoUser);
@@ -101,31 +172,54 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   // Auth0 integration methods
   const loginWithAuth0 = async () => {
-    await loginWithRedirect({
-      authorizationParams: {
-        connection: "Username-Password-Authentication",
-      },
-    });
+    try {
+      if (!loginWithRedirect) {
+        throw new Error("Auth0 loginWithRedirect is not available. Please check Auth0 configuration.");
+      }
+      
+      console.log("Attempting Auth0 login redirect...");
+      await loginWithRedirect({
+        authorizationParams: {
+          connection: "Username-Password-Authentication",
+        },
+      });
+    } catch (error) {
+      console.error("Auth0 loginWithRedirect error:", error);
+      const errorMessage = error instanceof Error ? error.message : "Failed to redirect to Auth0 login";
+      throw new Error(errorMessage);
+    }
   };
 
   const signUpWithAuth0 = async () => {
-    await loginWithRedirect({
-      authorizationParams: {
-        connection: "Username-Password-Authentication",
-        screen_hint: "signup",
-      },
-    });
+    try {
+      if (!loginWithRedirect) {
+        throw new Error("Auth0 loginWithRedirect is not available. Please check Auth0 configuration.");
+      }
+      
+      await loginWithRedirect({
+        authorizationParams: {
+          connection: "Username-Password-Authentication",
+          screen_hint: "signup",
+        },
+      });
+    } catch (error) {
+      console.error("Auth0 signUpWithAuth0 error:", error);
+      const errorMessage = error instanceof Error ? error.message : "Failed to redirect to Auth0 signup";
+      throw new Error(errorMessage);
+    }
   };
-
 
   const value: AuthContextType = {
     user,
     isAuthenticated: !!user,
     isLoading,
+    transactions,
+    isLoadingTransactions,
     login,
     logout,
     loginWithAuth0,
     signUpWithAuth0,
+    refreshTransactions,
   };
 
   return (

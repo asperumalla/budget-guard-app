@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
+import { useConfig } from "@/config/ConfigContext";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -14,6 +15,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { login, loginWithAuth0, signUpWithAuth0 } = useAuth();
+  const config = useConfig();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -21,15 +23,18 @@ const Login = () => {
     setIsLoading(true);
 
     try {
-      // Use Auth0 database login with the form credentials
+      // Use Auth0 database login - this will redirect to Auth0
+      // After successful login, Auth0 will redirect back to the configured redirect_uri
       await loginWithAuth0();
-      toast.success("Login successful! Welcome to BudgetGuard");
-      navigate("/budget/dashboard");
+      // Note: Code below won't execute because loginWithAuth0() redirects to Auth0
+      // After Auth0 login, user will be redirected back to /app/budget/dashboard
     } catch (error) {
-      toast.error("Login failed. Please try again.");
-    } finally {
       setIsLoading(false);
+      console.error("Login error:", error);
+      const errorMessage = error instanceof Error ? error.message : "Login failed. Please try again.";
+      toast.error(errorMessage);
     }
+    // Don't set loading to false here - user is being redirected
   };
 
   const handleSignUp = async () => {
@@ -50,7 +55,7 @@ const Login = () => {
             <span className="text-2xl font-bold text-white">💰</span>
           </div>
           <h1 className="text-3xl font-bold bg-gradient-to-r from-primary via-accent to-primary-glow bg-clip-text text-transparent">
-            Welcome to BudgetGuard
+            Welcome to {config.ui.appName}
           </h1>
           <p className="text-muted-foreground">
             Sign in to manage your personal finances

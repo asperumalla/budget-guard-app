@@ -6,6 +6,7 @@ import TransactionItem, { type TransactionCategory } from "@/components/Transact
 import SpendingChart from "@/components/SpendingChart";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import type { PlaidTransaction } from "@/services/api";
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -16,13 +17,44 @@ const Dashboard = () => {
   const budget = 600;
   const spent = 420;
 
-  const recentTransactions = [
-    { merchant: "Whole Foods", amount: 45.32, date: "Today", category: "Food" as TransactionCategory },
-    { merchant: "Uber", amount: 18.50, date: "Yesterday", category: "Travel" as TransactionCategory },
-    { merchant: "Amazon", amount: 89.99, date: "2 days ago", category: "Shopping" as TransactionCategory },
-    { merchant: "Netflix", amount: 15.99, date: "Jan 15", category: "Entertainment" as TransactionCategory },
-    { merchant: "Starbucks", amount: 6.75, date: "Jan 14", category: "Food" as TransactionCategory },
-  ];
+  // Get transactions from backend via AuthContext
+  const { transactions: plaidTransactions, isLoadingTransactions } = useAuth();
+  
+  // Transform Plaid transactions to TransactionData format for display
+  type TransactionCategory = "Food" | "Travel" | "Shopping" | "Bills" | "Entertainment" | "Other";
+  
+  const mapPlaidCategory = (plaidCategories: string[] | undefined): TransactionCategory => {
+    if (!plaidCategories || plaidCategories.length === 0) return "Other";
+    
+    const categoryMap: { [key: string]: TransactionCategory } = {
+      'Food and Drink': 'Food',
+      'Transportation': 'Travel',
+      'Shops': 'Shopping',
+      'Bills and Utilities': 'Bills',
+      'Entertainment': 'Entertainment',
+      'Gas Stations': 'Travel',
+      'Restaurants': 'Food',
+      'Groceries': 'Food',
+      'Online Services': 'Entertainment',
+      'Subscription Services': 'Entertainment',
+    };
+
+    for (const category of plaidCategories) {
+      if (categoryMap[category]) {
+        return categoryMap[category];
+      }
+    }
+    return "Other";
+  };
+
+  const recentTransactions = plaidTransactions
+    .slice(0, 5) // Show only first 5 transactions
+    .map((tx) => ({
+      merchant: tx.merchant_name || tx.name || "Unknown",
+      amount: Math.abs(tx.amount),
+      date: new Date(tx.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+      category: mapPlaidCategory(tx.category) as TransactionCategory,
+    }));
 
   const categoryData = [
     { name: "Food", value: 150, color: "hsl(43, 74%, 66%)" },
@@ -58,7 +90,7 @@ const Dashboard = () => {
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-semibold">Recent Transactions</h3>
-          <Link to="/transactions">
+          <Link to="/budget/transactions">
             <Button variant="ghost" size="sm" className="text-primary">
               View All
               <ArrowRight className="ml-2 h-4 w-4" />
@@ -69,9 +101,20 @@ const Dashboard = () => {
         <Card className="p-2 rounded-2xl border border-border relative overflow-hidden card-shadow bg-card">
           <div className="absolute inset-0 gradient-card opacity-20" />
           <div className="relative z-10 space-y-1">
-            {recentTransactions.map((transaction, index) => (
-              <TransactionItem key={index} {...transaction} />
-            ))}
+            {isLoadingTransactions ? (
+              <div className="text-center py-8 text-muted-foreground">
+                <p>Loading transactions...</p>
+              </div>
+            ) : recentTransactions.length > 0 ? (
+              recentTransactions.map((transaction, index) => (
+                <TransactionItem key={index} {...transaction} />
+              ))
+            ) : (
+              <div className="text-center py-8 text-muted-foreground">
+                <p>No transactions yet</p>
+                <p className="text-xs mt-2">Connect your bank account in Settings to see transactions</p>
+              </div>
+            )}
           </div>
         </Card>
       </div>

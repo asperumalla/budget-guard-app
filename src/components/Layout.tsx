@@ -2,6 +2,7 @@ import { Home, List, Settings, Plus, LogOut, User } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
+import { useConfig } from "@/config/ConfigContext";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -13,6 +14,7 @@ import {
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
   const { user, logout } = useAuth();
+  const config = useConfig();
 
   const navItems = [
     { icon: Home, label: "Home", path: "/budget/dashboard" },
@@ -30,7 +32,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
               <span className="text-sm font-bold text-white">💰</span>
             </div>
             <div>
-              <h1 className="text-lg font-semibold">BudgetGuard</h1>
+              <h1 className="text-lg font-semibold">{config.ui.appName}</h1>
               <p className="text-xs text-muted-foreground">Welcome back, {user?.name}</p>
             </div>
           </div>

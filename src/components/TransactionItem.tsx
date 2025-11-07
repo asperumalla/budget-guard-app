@@ -1,4 +1,4 @@
-import { ShoppingBag, Coffee, Car, Home, Utensils, MoreHorizontal } from "lucide-react";
+import { ShoppingBag, Coffee, Car, Home, Utensils, MoreHorizontal, type LucideIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 export type TransactionCategory = "Food" | "Travel" | "Shopping" | "Bills" | "Entertainment" | "Other";
@@ -12,7 +12,7 @@ interface TransactionItemProps {
   transaction_id?: string;
 }
 
-const categoryConfig: Record<TransactionCategory, { icon: any; color: string }> = {
+const categoryConfig: Record<TransactionCategory, { icon: LucideIcon; color: string }> = {
   Food: { icon: Utensils, color: "bg-chart-4/20 text-chart-4 border-chart-4/30" },
   Travel: { icon: Car, color: "bg-chart-2/20 text-chart-2 border-chart-2/30" },
   Shopping: { icon: ShoppingBag, color: "bg-chart-1/20 text-chart-1 border-chart-1/30" },
