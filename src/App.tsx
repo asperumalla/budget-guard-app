@@ -56,6 +56,12 @@ const AppContent = () => {
     );
   }
 
+  console.log("🔐 Initializing Auth0Provider with:", {
+    domain: auth0.domain,
+    clientId: auth0.clientId,
+    redirectUri: auth0.redirectUri,
+  });
+
   return (
     <Auth0Provider
       domain={auth0.domain}
@@ -64,6 +70,9 @@ const AppContent = () => {
         redirect_uri: auth0.redirectUri,
         audience: auth0.audience,
       }}
+      onRedirectCallback={(appState) => {
+        console.log("🔄 Auth0 redirect callback:", appState);
+      }}
     >
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
@@ -71,6 +80,8 @@ const AppContent = () => {
         <Sonner />
         <BrowserRouter basename="/app">
           <AuthProvider>
+          {console.log("🌐 BrowserRouter initialized with basename='/app'")}
+          {console.log("📍 Current pathname:", window.location.pathname)}
           <Routes>
             {/* Public Routes */}
             <Route path="/login" element={<Login />} />
