@@ -29,11 +29,20 @@ const initApp = async () => {
   try {
     await initializeConfig(backendUrl);
     logger.log("Configuration initialized successfully");
+    console.log("✅ Configuration initialized successfully");
     
     // Render app after config is loaded
-    createRoot(document.getElementById("root")!).render(<App />);
+    const rootElement = document.getElementById("root");
+    if (!rootElement) {
+      throw new Error("Root element not found");
+    }
+    
+    console.log("🚀 Rendering React app...");
+    createRoot(rootElement).render(<App />);
+    console.log("✅ React app rendered");
   } catch (error) {
     logger.error("Failed to initialize configuration:", error);
+    console.error("❌ Failed to initialize configuration:", error);
     const root = document.getElementById("root");
     if (root) {
       root.innerHTML = `

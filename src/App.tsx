@@ -23,6 +23,12 @@ const queryClient = new QueryClient();
 const AppContent = () => {
   const config = useConfig();
   const { auth0 } = config;
+  
+  console.log("📋 AppContent rendering with config:", { 
+    domain: auth0.domain, 
+    clientId: auth0.clientId ? "✓ Set" : "✗ Missing",
+    redirectUri: auth0.redirectUri 
+  });
 
   // Validate Auth0 configuration
   if (!auth0.domain || !auth0.clientId || !auth0.redirectUri) {
