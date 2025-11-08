@@ -9,7 +9,10 @@ interface ProtectedRouteProps {
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const { isAuthenticated, isLoading } = useAuth();
 
+  console.log("🔒 ProtectedRoute: isLoading=", isLoading, "isAuthenticated=", isAuthenticated);
+
   if (isLoading) {
+    console.log("⏳ ProtectedRoute: Showing loading skeleton");
     return (
       <div className="min-h-screen p-6 max-w-lg mx-auto space-y-6">
         <div className="space-y-4">
@@ -26,9 +29,11 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   }
 
   if (!isAuthenticated) {
+    console.log("🚫 ProtectedRoute: Not authenticated, redirecting to /login");
     return <Navigate to="/login" replace />;
   }
 
+  console.log("✅ ProtectedRoute: Authenticated, rendering children");
   return <>{children}</>;
 };
 
