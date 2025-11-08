@@ -6,7 +6,11 @@
   "framework": "vite",
   "rewrites": [
     {
-      "source": "/app/((?!assets).*)",
+      "source": "/app/assets/(.*)",
+      "destination": "/assets/$1"
+    },
+    {
+      "source": "/app/(.*)",
       "destination": "/app/index.html"
     },
     {
