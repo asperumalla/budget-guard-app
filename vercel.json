@@ -12,10 +12,13 @@
     {
       "source": "/app/(.*)",
       "destination": "/app/index.html"
-    },
+    }
+  ],
+  "redirects": [
     {
       "source": "/",
-      "destination": "/app/index.html"
+      "destination": "/app/",
+      "permanent": false
     }
   ],
   "headers": [
